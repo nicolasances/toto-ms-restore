@@ -19,6 +19,7 @@ export class ControllerConfig implements TotoControllerConfig {
     mongoHost: string | undefined;
     expectedAudience: string | undefined;
     totoAuthEndpoint: string | undefined;
+    totoRestoreUser: string | undefined;
 
 
     async load(): Promise<any> {
@@ -37,17 +38,11 @@ export class ControllerConfig implements TotoControllerConfig {
 
         }));
 
-        // promises.push(secretManagerClient.accessSecretVersion({ name: `projects/${process.env.GCP_PID}/secrets/REPLACE-mongo-user/versions/latest` }).then(([version]) => {
+        promises.push(secretManagerClient.accessSecretVersion({ name: `projects/${process.env.GCP_PID}/secrets/toto-restore-user/versions/latest` }).then(([version]) => {
 
-        //     this.mongoUser = version.payload!.data!.toString();
+            this.totoRestoreUser = version.payload!.data!.toString();
 
-        // }));
-
-        // promises.push(secretManagerClient.accessSecretVersion({ name: `projects/${process.env.GCP_PID}/secrets/REPLACE-mongo-pswd/versions/latest` }).then(([version]) => {
-
-        //     this.mongoPwd = version.payload!.data!.toString();
-
-        // }));
+        }));
 
         promises.push(secretManagerClient.accessSecretVersion({ name: `projects/${process.env.GCP_PID}/secrets/toto-auth-endpoint/versions/latest` }).then(([version]) => {
 
